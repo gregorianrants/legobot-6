@@ -9,9 +9,11 @@ const { spawn } = require('child_process');
 const motorsFactory = require('./motors.js');
 const Raspi = require('raspi-io').RaspiIO;
 const {Board} = require("johnny-five");
+const Drive = require('./drive')
 
 
-const Redis = require('ioredis')
+const Redis = require('ioredis');
+const BehaviourManager = require('./behaviourManger.js');
 
 const io = new Server(server,{
   cors: {
@@ -30,18 +32,7 @@ redis_s.subscribe(CAMERA_CHANNEL )
 const redis_p = new Redis()
 
 function setUpMotors(socket){
-  const speed = 60
-  
-  motors = motorsFactory()
-
-  socket.on('drive',(msg)=>{
-    if(msg==='forward'){
-      motors.forward(speed)
-    }
-    if(msg==='stop'){
-      motors.stop(speed)
-    }
-  })
+  const behaviour = new BehaviourManager(socket)
 }
 
 function setUpCamera(socket){
