@@ -10,6 +10,7 @@ const motorsFactory = require('./motors.js');
 const Raspi = require('raspi-io').RaspiIO;
 const {Board} = require("johnny-five");
 const Drive = require('./drive')
+const Gpio = require('pigpio').Gpio;
 
 
 const Redis = require('ioredis');
@@ -54,7 +55,8 @@ async function onConnection(socket){
     setUpMotors(socket)
     setUpCamera(socket)
     handleDisconnect(socket)
- }
+}
+    
 
 function setUpSocket(){
   io.on('connection',onConnection)

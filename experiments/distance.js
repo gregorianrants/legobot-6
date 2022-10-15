@@ -20,12 +20,31 @@ const watchHCSR04 = () => {
     } else {
       const endTick = tick;
       const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
-      console.log(diff / 2 / MICROSECDONDS_PER_CM);
+      console.log('1',diff / 2 / MICROSECDONDS_PER_CM);
     }
   });
 };
 
+const trigger2 = new Gpio(24, {mode: Gpio.OUTPUT});
+const echo2 = new Gpio(23, {mode: Gpio.INPUT, alert: true});
+
+const watchHCSR042 = () => {
+  let startTick;
+
+  echo2.on('alert', (level, tick) => {
+    if (level == 1) {
+      startTick = tick;
+    } else {
+      const endTick = tick;
+      const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
+      console.log('2',diff / 2 / MICROSECDONDS_PER_CM);
+    }
+  });
+};
+
+
 watchHCSR04();
+watchHCSR042();
 
 // Trigger a distance measurement once per second
 setInterval(() => {
