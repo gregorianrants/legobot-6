@@ -2,3 +2,22 @@ numpy was previously on numpy==1.19.5
 i cahnged it to 1.23.2 because something relied on this up to date version
 
 however somemting else may end up not working because expects the earlier version
+
+node versions
+it seems that sudo doesnt use nvm and is on a different node version
+sudo node -v, gives v18.9.1
+whereas 
+node -v, gives v15.14.0
+
+i am getting an error with pigpio that it was compiled with wrong version, i recompiled i.e. npm rebuild pigpio
+
+i think it actually didnt work because i needed sudo as after rebuilding i got
+
+Sorry, you don't have permission to run this program.    |
+|Try running as root, e.g. precede the command with sudo.
+
+
+i am going to try setting nvm to same as sudo node.
+this may brake other things 
+if so roll back nvm version to v15.14.0
+

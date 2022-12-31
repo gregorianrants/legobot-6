@@ -13,8 +13,9 @@ trigger.digitalWrite(0); // Make sure trigger is low
 
 const watchHCSR04 = () => {
   let startTick;
-
+console.log('hellpoe')
   echo.on('alert', (level, tick) => {
+    console.log('hellpoeasdfsdfsdfsdf')
     if (level == 1) {
       startTick = tick;
     } else {
@@ -49,4 +50,5 @@ watchHCSR042();
 // Trigger a distance measurement once per second
 setInterval(() => {
   trigger.trigger(10, 1); // Set trigger high for 10 microseconds
+  trigger2.trigger(10,1)
 }, 1000);

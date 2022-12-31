@@ -28,7 +28,8 @@ app.get('/', (req, res) => {
 
 const redis_s = new Redis()
 const CAMERA_CHANNEL = 'camera'
-redis_s.subscribe(CAMERA_CHANNEL )
+redis_s.subscribe(CAMERA_CHANNEL)
+
 
 const redis_p = new Redis()
 
@@ -55,6 +56,15 @@ async function onConnection(socket){
     setUpMotors(socket)
     setUpCamera(socket)
     handleDisconnect(socket)
+
+    socket.on('record',msg=>{
+      if(msg==='start'){
+        redis_p.publish('command','start-recording')
+      }
+      if(msg==='stop'){
+        redis_p.publish('command','stop-recording')
+      }
+    })
 }
     
 
@@ -70,6 +80,7 @@ board.on('ready',()=>{
   setUpSocket()
 })
 
+//TODO we are currently serving react from local host 3000 on windows?
 server.listen(3000, '0.0.0.0',() => {
   console.log('listening on *:3000');
 });

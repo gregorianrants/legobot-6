@@ -10,7 +10,6 @@ subscriber.subscribe('command')
 def getCommand():
         message = subscriber.get_message()
         if message and not message['data']==1: 
-                print(message['data'])
                 return message['data'].decode('utf-8')
         else:
                 return False
