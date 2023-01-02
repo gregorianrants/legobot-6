@@ -8,7 +8,8 @@ import io
 import numpy as np
 import base64
 import time
-from pubsub import getCommand,publishImage
+from pubsub import getCommand,publishImage,publishDistance
+from flood import flood
 
 camera = PiCamera()
 camera.resolution = (320, 240)
@@ -55,7 +56,10 @@ class Manager:
                 self.capture_manager = CaptureManager()
         def set_image(self,image):
                 self.image = image
+                [image,left,right] = flood(image)
+                self.image = image
                 self.handleCommand()
+                publishDistance(left,right)
                 self.capture_manager.new_image(self.image)
                 self.send_image()
 
