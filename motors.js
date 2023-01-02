@@ -1,25 +1,31 @@
 const {Motor,Motors} = require("johnny-five");
-const Raspi = require('raspi-io').RaspiIO;
+const getBoard = require('./j5board.js')
+const {EventEmitter} = require('events')
 
-
-
-class MotorsController{
+class MotorsController extends EventEmitter{
   constructor ({MAX_SPEED}){
+    super()
     this.motors = null       
     this.leftMotors = null       
     this.rightMotors = null
     this.MAX_SPEED = MAX_SPEED
-    this.board = null
+    this.board = getBoard()
+  }
+
+  onReady = ()=>{
+      console.log('in ready')
+      const frontLeft = new Motor(Motor.SHIELD_CONFIGS.ADAFRUIT_V2.M1)
+      const frontRight = new Motor(Motor.SHIELD_CONFIGS.ADAFRUIT_V2.M2)
+      const rearLeft = new Motor(Motor.SHIELD_CONFIGS.ADAFRUIT_V2.M3)
+      const rearRight = new Motor(Motor.SHIELD_CONFIGS.ADAFRUIT_V2.M4)
+      this.motors = new Motors([frontLeft, frontRight,rearLeft,rearRight])
+      this.leftMotors = new Motors([frontLeft,rearLeft])
+      this.rightMotors = new Motors([frontRight,rearRight])
+      this.emit('ready')
   }
 
   configure(){
-    const frontLeft = new Motor(Motor.SHIELD_CONFIGS.ADAFRUIT_V2.M1)
-    const frontRight = new Motor(Motor.SHIELD_CONFIGS.ADAFRUIT_V2.M2)
-    const rearLeft = new Motor(Motor.SHIELD_CONFIGS.ADAFRUIT_V2.M3)
-    const rearRight = new Motor(Motor.SHIELD_CONFIGS.ADAFRUIT_V2.M4)
-    this.motors = new Motors([frontLeft, frontRight,rearLeft,rearRight])
-    this.leftMotors = new Motors([frontLeft,rearLeft])
-    this.rightMotors = new Motors([frontRight,rearRight])
+    this.board.then(this.onReady)
   }
 
   percentageOfMax(percentage){
@@ -106,6 +112,8 @@ class MotorsController{
   }
 }
 
+
+//TODO make this a singleton
 function motorsFactory(){
   const motors = new MotorsController({MAX_SPEED: 250})
   motors.configure()
@@ -113,8 +121,6 @@ function motorsFactory(){
 }
 
 
+
 module.exports =  motorsFactory
-
-
-
 

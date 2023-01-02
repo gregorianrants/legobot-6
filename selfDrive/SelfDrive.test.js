@@ -2,19 +2,6 @@ const SelfDrive = require('./SelfDrive.js')
 const motorsFactory = require('../motors.js');
 const readline = require('readline');
 
-// const Raspi = require('raspi-io').RaspiIO;
-// const {Board} = require("johnny-five");
-
-
-
-
-// const board = new Board({
-//   io: new Raspi()
-// });
-
-// board.on('ready',()=>{
-  motors = motorsFactory()
-
 // function fakeMotors(){
 //   return {
 //     forward(){
@@ -33,18 +20,26 @@ const readline = require('readline');
 // }
 
 // motors = fakeMotors()
-
+// const selfDrive = new SelfDrive(motors)
+// selfDrive.startSelfDrive()
 
 readline.emitKeypressEvents(process.stdin);
 process.stdin.setRawMode(true);
 
-const selfDrive = new SelfDrive(motors)
-selfDrive.startSelfDrive()
+const motors = motorsFactory()
+
+let selfDrive = null
+
+motors.on('ready',()=>{
+  selfDrive = new SelfDrive(motors)
+  selfDrive.startSelfDrive()
+})
+
 
 process.stdin.on('keypress', async (str, key) => {
   if (key.ctrl && key.name === 'c') {
     console.log('stopping self drive and killing the proccess')
-    await selfDrive.stopSelfDrive()
+    selfDrive.stopSelfDrive()
     process.exit();
   } 
   if (key = 'q'){

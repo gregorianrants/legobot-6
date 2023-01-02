@@ -5,12 +5,7 @@ app.use(cors())
 const http = require('http');
 const server = http.createServer(app);
 const {Server} = require("socket.io")
-const { spawn } = require('child_process');
-const motorsFactory = require('./motors.js');
-const Raspi = require('raspi-io').RaspiIO;
-const {Board} = require("johnny-five");
-const Drive = require('./drive')
-const Gpio = require('pigpio').Gpio;
+//const Gpio = require('pigpio').Gpio;
 
 
 const Redis = require('ioredis');
@@ -33,7 +28,7 @@ redis_s.subscribe(CAMERA_CHANNEL)
 
 const redis_p = new Redis()
 
-function setUpMotors(socket){
+function setUpManager(socket){
   const behaviour = new BehaviourManager(socket)
 }
 
@@ -53,7 +48,7 @@ function handleDisconnect(socket){
 
 async function onConnection(socket){
     console.log('a user connected')
-    setUpMotors(socket)
+    setUpManager(socket)
     setUpCamera(socket)
     handleDisconnect(socket)
 
@@ -72,13 +67,9 @@ function setUpSocket(){
   io.on('connection',onConnection)
 }
 
-const board = new Board({
-  io: new Raspi()
-});
 
-board.on('ready',()=>{
-  setUpSocket()
-})
+
+setUpSocket()
 
 //TODO we are currently serving react from local host 3000 on windows?
 server.listen(3000, '0.0.0.0',() => {

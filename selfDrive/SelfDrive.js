@@ -51,10 +51,10 @@ class SelfDrive{
                         this.motors.forward(60)
                 }
                 if(this.nextAction ==ACTIONS.PIVOT_LEFT){
-                        this.motors.pivotLeft(60)
+                        this.motors.pivotLeft(80)
                 }
                 if(this.nextAction ==ACTIONS.PIVOT_RIGHT){
-                        this.motors.pivotRight(60)
+                        this.motors.pivotRight(80)
                 }
                 if(this.nextAction ==ACTIONS.STOP){
                         this.motors.stop()
